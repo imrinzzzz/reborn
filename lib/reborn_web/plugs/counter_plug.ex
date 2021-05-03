@@ -15,7 +15,7 @@ defmodule RebornWeb.Plugs.Counter do
   defp create_if_not_exist(repo) do
     query = Repo.get(repo, 1)
     case query do
-      %LiveCounter{counters: counter} ->
+      %LiveCounter{counters: _counter} ->
         query
 
       nil ->
