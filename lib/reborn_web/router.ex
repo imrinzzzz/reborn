@@ -17,8 +17,8 @@ defmodule RebornWeb.Router do
   scope "/", RebornWeb do
     pipe_through :browser
 
-    live_dashboard "/", metrics: RebornWeb.Telemetry, ecto_repos: [Reborn.Repo]
     get "/welcome", PageController, :index
+    live_dashboard "/", metrics: RebornWeb.Telemetry, ecto_repos: [Reborn.Repo]
   end
 
   # Other scopes may use custom stacks.
