@@ -15,6 +15,10 @@ defmodule RebornWeb.Router do
     plug :basic_auth, Application.compile_env(:reborn_app, :basic_auth)
   end
 
+  pipeline :live_dashboard_counter do
+    plug RebornWeb.Plugs.Counter
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -26,7 +30,7 @@ defmodule RebornWeb.Router do
   end
 
   scope "/", RebornWeb do
-    pipe_through [:browser, :admins_auth]
+    pipe_through [:browser, :admins_auth, :live_dashboard_counter]
 
     live_dashboard "/", metrics: RebornWeb.Telemetry, ecto_repos: [Reborn.Repo]
   end
