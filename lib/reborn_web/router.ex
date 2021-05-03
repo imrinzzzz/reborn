@@ -1,6 +1,7 @@
 defmodule RebornWeb.Router do
   use RebornWeb, :router
   import Phoenix.LiveDashboard.Router
+  import Plug.BasicAuth
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -10,14 +11,23 @@ defmodule RebornWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :admins_auth do
+    plug :basic_auth, Application.compile_env(:reborn_app, :basic_auth)
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/", RebornWeb do
+  scope "/app", RebornWeb do
     pipe_through :browser
 
-    get "/welcome", PageController, :index
+    get "/", PageController, :index
+  end
+
+  scope "/", RebornWeb do
+    pipe_through [:browser, :admins_auth]
+
     live_dashboard "/", metrics: RebornWeb.Telemetry, ecto_repos: [Reborn.Repo]
   end
 
