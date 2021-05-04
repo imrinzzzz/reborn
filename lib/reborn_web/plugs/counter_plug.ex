@@ -33,7 +33,10 @@ defmodule RebornWeb.Plugs.Counter do
   end
 
   defp print_to_console(counter) do
+    fences = String.duplicate("=", 30)
+    IO.puts(fences)
     IO.inspect("The current counter is #{counter - 1}")
+    IO.puts(fences)
   end
 
 end
