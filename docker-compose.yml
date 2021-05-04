@@ -1,3 +1,4 @@
+# docker-compose version
 version: '3.7'
 
 services: 
@@ -30,6 +31,7 @@ services:
             - postgres:/var/lib/postgresql/data
         ports: 
             - "5432:5432"
+        # specify postgresql environment variable
         environment:
             - POSTGRES_DB=reborn
             - POSTGRES_USER=postgres
