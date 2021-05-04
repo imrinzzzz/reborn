@@ -12,7 +12,7 @@ defmodule RebornWeb.Router do
   end
 
   pipeline :admins_auth do
-    plug :basic_auth, Application.compile_env(:reborn_app, :basic_auth)
+    plug :basic_auth, Application.compile_env(:reborn, :basic_auth)
   end
 
   pipeline :live_dashboard_counter do
