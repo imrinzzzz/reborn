@@ -1,5 +1,10 @@
 defmodule RebornWeb.Plugs.Counter do
+  @moduledoc """
+  A plug that increment counters and print to console
+  """
   alias Reborn.{Repo, LiveCounter}
+  require Logger
+  use Plug.Debugger
 
   @spec init(default()) :: any()
   @type default() :: any()
@@ -12,6 +17,7 @@ defmodule RebornWeb.Plugs.Counter do
     |> create_if_not_exist()
     |> increment_counter()
     |> print_to_console()
+    |> Logger.info()
 
     conn
   end
@@ -19,10 +25,10 @@ defmodule RebornWeb.Plugs.Counter do
   @spec create_if_not_exist(repo()) :: LiveCounter
   @type repo() :: LiveCounter
   defp create_if_not_exist(repo) do
-    query = Repo.get(repo, 1)
+    query = Repo.get!(repo, 1)
     case query do
       %LiveCounter{counters: _counter} ->
-        query
+       query
 
       nil ->
         Repo.insert!(%LiveCounter{counters: 1})
@@ -44,9 +50,13 @@ defmodule RebornWeb.Plugs.Counter do
   @type counter() :: integer()
   defp print_to_console(counter) do
     fences = String.duplicate("=", 30)
-    IO.puts(fences)
-    IO.inspect("The current counter is #{counter - 1}")
-    IO.puts(fences)
+    str = """
+      \n
+      #{fences}
+      The current counter is #{counter - 1}
+      #{fences}
+      """
+    str
   end
 
 end
