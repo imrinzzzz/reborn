@@ -7,6 +7,5 @@ defmodule Reborn.Repo.Migrations.CreateLiveCounters do
 
       timestamps()
     end
-
   end
 end

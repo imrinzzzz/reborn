@@ -26,9 +26,10 @@ defmodule RebornWeb.Plugs.Counter do
   @type repo() :: LiveCounter
   defp create_if_not_exist(repo) do
     query = Repo.get!(repo, 1)
+
     case query do
       %LiveCounter{counters: _counter} ->
-       query
+        query
 
       nil ->
         Repo.insert!(%LiveCounter{counters: 1})
@@ -41,7 +42,7 @@ defmodule RebornWeb.Plugs.Counter do
   @spec increment_counter(query()) :: integer()
   @type query() :: LiveCounter
   defp increment_counter(query) do
-    LiveCounter.changeset(query, %{counters: query.counters+1})
+    LiveCounter.changeset(query, %{counters: query.counters + 1})
     |> Repo.update!()
     |> Map.fetch!(:counters)
   end
@@ -50,13 +51,14 @@ defmodule RebornWeb.Plugs.Counter do
   @type counter() :: integer()
   defp print_to_console(counter) do
     fences = String.duplicate("=", 30)
+
     str = """
-      \n
-      #{fences}
-      The current counter is #{counter - 1}
-      #{fences}
-      """
+    \n
+    #{fences}
+    The current counter is #{counter - 1}
+    #{fences}
+    """
+
     str
   end
-
 end
