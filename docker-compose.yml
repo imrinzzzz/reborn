@@ -1,0 +1,40 @@
+version: '3.7'
+
+services: 
+    web:
+        build:
+            context: .  
+        ports: 
+            - "4000:4000"
+        volumes: 
+            # Files that will see changes without rebuilding the container 
+            - ./assets/css:/app/assets/css
+            - ./assets/js:/app/assets/js
+            - ./assets/static:/app/assets/static
+            - ./assets/.babelrc:/app/assets/.babelrc
+            - ./assets/package.json:/app/assets/package.json
+            - ./assets/webpack.config.js:/app/assets/webpack.config.js
+            - ./config:/app/config
+            - ./lib:/app/lib
+            - ./priv:/app/priv
+            - ./mix.exs:/app/mix.exs
+            - ./mix.lock:/app/mix.lock
+            - ./test:/app/test
+        depends_on: 
+            # runs db before running web
+            - db
+    db:
+        image: postgres:13.2
+        # Declare a volume to persist postgresql database even when the container stops
+        volumes:
+            - postgres:/var/lib/postgresql/data
+        ports: 
+            - "5432:5432"
+        environment:
+            - POSTGRES_DB=reborn
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+# This needs to be declared because `volumes` was uesd in the `db` container
+# Tells Docker to create a volume on the host machine to maintain data
+volumes:
+    postgres:
